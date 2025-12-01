@@ -24,4 +24,26 @@ fun main() {
     }
 
     println("Solution 01: $zerosCount")
+
+
+    // Problem 02:
+    position = 50
+    zerosCount = 0
+
+    for ((direction, distance) in input) {
+
+        val delta = if (direction == 'R') 1 else -1
+
+        // Couldn't find a better implementation than just iterating step by step :/
+        repeat(distance) {
+            position += delta
+            if (position % 100 == 0) {
+                zerosCount++
+            }
+        }
+
+    }
+
+    println("Solution 02: $zerosCount")
+
 }
