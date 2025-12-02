@@ -49,7 +49,6 @@ fun main() {
                         || anythingRepeated(idStr) // New condition for part 2
             }
         }
-        .also { println(it) }
         .flatten()
         .sum()
 
