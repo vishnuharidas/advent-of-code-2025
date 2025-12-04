@@ -2,7 +2,8 @@ import util.R
 
 class Matrix<E>(input: List<List<E>>) {
 
-    private val data = input.map { it.toMutableList() }.toMutableList() // Made it mutable for debugging purposes
+    private val data =
+        input.map { it.toMutableList() }.toMutableList() // Made it mutable for debugging purposes (also used in Part 2)
     val rows: Int = input.size
     val cols: Int = if (rows > 0) input[0].size else 0
 
@@ -48,6 +49,11 @@ class Matrix<E>(input: List<List<E>>) {
         }
         return sb.toString()
     }
+
+    fun copy(): Matrix<E> {
+        val newData = data.map { it.toList() }
+        return Matrix(newData)
+    }
 }
 
 fun main() {
@@ -86,8 +92,40 @@ fun main() {
         return movables
     }
 
+    fun countRemovables(matrix: Matrix<String>): Int {
+
+        val matrixFinal = matrix.copy()
+
+        var movables = 0
+
+        matrix.forEach { row, col, item ->
+
+            if (item == "@") {
+                val neighbors = matrix.neighbors(row, col, ".").count { it == "@" }
+
+                if (neighbors < 4) {
+                    matrixFinal[row, col] = "."
+                    movables++
+                } else {
+                    matrixFinal[row, col] = "@"
+                }
+            } else {
+                matrixFinal[row, col] = "."
+            }
+
+        }
+
+        return if (movables == 0) {
+            0
+        } else {
+            movables + countRemovables(matrixFinal)
+        }
+    }
+
+    fun part2(input: List<List<String>>) = countRemovables(Matrix(input))
 
     val inputCleaned = input.map { it.split("").filter { c -> c.isNotEmpty() } }
     println("Part 1: Movable rolls = ${part1(inputCleaned)}")
+    println("Part 2: Total removable rolls = ${part2(inputCleaned)}")
 
 }
